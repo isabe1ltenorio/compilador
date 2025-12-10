@@ -1,0 +1,11 @@
+programa ERRO_SINTATICO_ORDEM;
+
+{ERRO SINTÁTICO: Comandos antes das declarações}
+
+
+inicio
+  escreva(x)
+fim.
+
+var x : inteiro := 10;
+

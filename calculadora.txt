@@ -1,0 +1,61 @@
+programa CALCULADORA;
+
+VAR x : inteiro := 10;
+vAr y : inteiro := 5;
+Var resultado : inteiro;
+var maior : booleano;
+
+{Procedimento para imprimir mensagem}
+procedimento imprimirMensagem(inteiro valor);
+inicio
+ escreva(valor)
+fim
+
+{Função para somar dois números}
+funcao somar(inteiro a, inteiro b) : inteiro;
+var soma : inteiro;
+inicio
+ soma := a + b;
+ retorna soma;
+fim
+
+{Função para multiplicar}
+funcao multiplicar(inteiro a, inteiro b) : inteiro;
+inicio
+ retorna a * b;
+fim
+
+inicio
+ {Calcula e exibe a soma}
+ resultado := somar(x, y);
+ escreva(resultado);
+ 
+ {Testa qual é maior}
+ maior := x > y;
+ 
+ se maior entao
+ escreva(x)
+ senao
+ escreva(y);
+ 
+ {Laço com break e continue}
+ resultado := 0;
+ enquanto resultado < 10 faca
+ inicio
+ escreva(resultado);
+ resultado := resultado + 1;
+ 
+ se resultado == 5 entao
+ continue;
+ 
+ se resultado == 8 entao
+ pare;
+ fim;
+ 
+ {Chama procedimento}
+ imprimirMensagem(resultado);
+ 
+ {Calcula multiplicação}
+ resultado := multiplicar(x, y);
+ escreva(resultado)
+fim.

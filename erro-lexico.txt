@@ -1,0 +1,10 @@
+programa ERRO_LEXICO;
+
+{comentário sem abrir chaves e}
+
+var x : inteiro := 10;
+var y : inteiro := 5;
+
+inicio
+  escreva(x)
+fim.
