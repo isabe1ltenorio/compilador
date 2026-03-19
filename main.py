@@ -1,6 +1,6 @@
 """
 Compilador - Programa Principal
-Integra o analisador léxico e sintático
+Integra análise léxica, sintática e semântica
 """
 
 import sys
@@ -8,16 +8,17 @@ from lexer import Lexer
 from parser import Parser
 
 
-def compilar(arquivo_fonte):
-    """Compila um arquivo de código fonte"""
-    
-    print("=" * 80)
-    print(f"COMPILADOR - Análise Léxica e Sintática")
+def compilar(arquivo_fonte: str) -> bool:
+    SEP  = "=" * 80
+    DASH = "-" * 80
+
+    print(SEP)
+    print(f"COMPILADOR — Léxico + Sintático + Semântico")
     print(f"Arquivo: {arquivo_fonte}")
-    print("=" * 80)
+    print(SEP)
     print()
-    
-    # Ler o arquivo fonte
+
+    # ── Leitura do arquivo ────────────────────────────────────────────────
     try:
         with open(arquivo_fonte, 'r', encoding='utf-8') as f:
             codigo = f.read()
@@ -27,82 +28,103 @@ def compilar(arquivo_fonte):
     except Exception as e:
         print(f"ERRO ao ler arquivo: {e}")
         return False
-    
+
     print("CÓDIGO FONTE:")
-    print("-" * 80)
+    print(DASH)
     print(codigo)
-    print("-" * 80)
+    print(DASH)
     print()
-    
-    # ANÁLISE LÉXICA
-    print("ANÁLISE LÉXICA")
-    print("-" * 80)
-    
+
+    # ── Fase 1: Análise Léxica ────────────────────────────────────────────
+    print("FASE 1 — ANÁLISE LÉXICA")
+    print(DASH)
+
     lexer = Lexer(codigo)
     tokens, erros_lexicos = lexer.tokenizar()
-    
+
     if erros_lexicos:
-        print("ERROS LÉXICOS ENCONTRADOS:")
-        for erro in erros_lexicos:
-            print(f"  {erro}")
+        print("ERROS LÉXICOS:")
+        for e in erros_lexicos:
+            print(f"  {e}")
         print()
+        _imprimir_falha()
         return False
-    
-    print("Tokens encontrados:")
-    print()
+
+    print("Tokens encontrados:\n")
     for i, token in enumerate(tokens):
         if token.tipo.name != 'EOF':
-            print(f"  {i+1:3d}. {token}")
-    
+            print(f"  {i+1:4d}. {token}")
     print()
-    print(f"Total de tokens: {len(tokens) - 1} (excluindo EOF)")
-    print("Análise léxica concluída sem erros")
+    print(f"Total: {len(tokens) - 1} tokens (sem EOF)")
+    print("✓ Análise léxica sem erros")
     print()
-    
-    
-    # ANÁLISE SINTÁTICA 
-    print("ANÁLISE SINTÁTICA")
-    print("-" * 80)
-    
+
+    # ── Fase 2 + 3: Análise Sintática e Semântica ─────────────────────────
+    print("FASE 2 — ANÁLISE SINTÁTICA")
+    print(DASH)
+
     parser = Parser(tokens)
-    sucesso, erros_sintaticos = parser.analisar()
-    
+    sucesso, erros_sintaticos, erros_semanticos = parser.analisar()
+
     if erros_sintaticos:
-        print("ERROS SINTÁTICOS ENCONTRADOS:")
-        for erro in erros_sintaticos:
-            print(f"{erro}")
+        print("ERROS SINTÁTICOS:")
+        for e in erros_sintaticos:
+            print(f"  {e}")
         print()
+        _imprimir_falha()
         return False
-    
-    if sucesso:
-        print("Análise sintática concluída sem erros")
+
+    print("✓ Análise sintática sem erros")
+    print()
+
+    print("FASE 3 — ANÁLISE SEMÂNTICA")
+    print(DASH)
+
+    if erros_semanticos:
+        print("ERROS SEMÂNTICOS:")
+        for e in erros_semanticos:
+            print(f"  {e}")
         print()
-        print("=" * 80)
-        print("COMPILAÇÃO BEM-SUCEDIDA!")
-        print("  O programa está sintaticamente correto.")
-        print("=" * 80)
-        return True
+        _imprimir_falha()
+        return False
+
+    print("✓ Análise semântica sem erros")
+    print()
+
+    # ── Tabela de símbolos ────────────────────────────────────────────────
+    print("TABELA DE SÍMBOLOS")
+    print(DASH)
+    historico = parser.tabela.listar_historico()
+    if historico:
+        for entrada in historico:
+            print(f"  {entrada}")
     else:
-        print()
-        print("=" * 80)
-        print("COMPILAÇÃO FALHOU")
-        print("=" * 80)
-        return False
+        print("  (vazia)")
+    print()
+
+    _imprimir_sucesso()
+    return True
+
+
+def _imprimir_sucesso():
+    print("=" * 80)
+    print("COMPILAÇÃO BEM-SUCEDIDA!")
+    print("  Léxico ✓  Sintático ✓  Semântico ✓")
+    print("=" * 80)
+
+
+def _imprimir_falha():
+    print("=" * 80)
+    print("COMPILAÇÃO FALHOU")
+    print("=" * 80)
 
 
 def main():
-    """Função principal"""
-    
     if len(sys.argv) != 2:
         print("Uso: python main.py <arquivo_fonte>")
-        print()
-        print("Exemplo:")
-        print("  python main.py programa.txt")
+        print("Exemplo: python main.py programa.txt")
         sys.exit(1)
-    
-    arquivo_fonte = sys.argv[1]
-    sucesso = compilar(arquivo_fonte)
-    
+    sucesso = compilar(sys.argv[1])
     sys.exit(0 if sucesso else 1)
 
 

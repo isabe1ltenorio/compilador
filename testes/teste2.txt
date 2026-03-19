@@ -1,0 +1,19 @@
+programa EXEMPLO_ENQUANTO;
+var contador : inteiro := 0;
+var soma : inteiro := 0;
+
+inicio
+  enquanto contador < 5 faca
+  inicio
+    soma := soma + contador;
+    contador := contador + 1;
+
+    se contador == 3 entao
+      continue;
+
+    se contador == 5 entao
+      pare;
+
+    escreva(soma)
+  fim
+fim.

@@ -1,0 +1,24 @@
+programa EXEMPLO_PROCEDIMENTO;
+var x : float := 5.0;
+var y : inteiro := 10;
+
+procedimento exibir(inteiro valor);
+inicio
+  escreva(valor)
+fim
+
+procedimento exibirMaior(float a, inteiro b);
+var maior : booleano;
+inicio
+  maior := a > b;
+  se maior entao
+    escreva(a)
+  senao
+    escreva(b)
+fim
+
+inicio
+  exibir(x);
+  exibir(y);
+  exibirMaior(x, y)
+fim.

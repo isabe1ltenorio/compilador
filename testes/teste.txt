@@ -1,0 +1,11 @@
+programa EXEMPLO_ERROS;
+var x : inteiro := 10;
+var flag : booleano := verdadeiro;
+
+inicio
+  flag := x + 1;
+  x := flag;
+  se x entao
+    escreva(x);
+  escreva(nao_declarada)
+fim.
